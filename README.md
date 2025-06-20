@@ -35,5 +35,5 @@ Including said script will automatically render both the require and use functio
 though the [AutoCORS](https://github.com/Telos-Project/AutoCORS) functionality must be included
 separately through the AutoCORS script.
 
-On the backend, Use JS is available on npm under the package name "use-js". Merely requiring said
-package shall render the use function globally available in the backend environment.
+On the backend, Use JS is available on npm under the package name "telos-use-js". Merely requiring
+said package shall render the use function globally available in the backend environment.
