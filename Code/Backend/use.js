@@ -196,11 +196,11 @@ function useJS() {
 						catch(error) {
 
 							item = (new Function(
-								"use = arguments[0];" +
+								"use = arguments[0]; require = arguments[1];" +
 									"var module={exports:{}};" +
 									text +
 									";return module.exports;"
-							))(use);
+							))(use, require);
 						}
 					}
 
