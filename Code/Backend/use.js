@@ -143,16 +143,19 @@ function useJS() {
 				!path.startsWith("https://") &&
 				!options.global) {
 
+				let modulePath = path.includes("/") ?
+					path.substring(0, path.indexOf("/")) : path;
+
 				if(!(
 					require("fs").existsSync(path) ||
 						require("fs").existsSync(path + ".js")
-				) && !installedModules.includes(path)) {
+				) && !installedModules.includes(modulePath)) {
 			
 					try {
 
-						use.execSync("npm install \"" + path + "\"");
+						use.execSync("npm install \"" + modulePath + "\"");
 
-						installedModules.push(path);
+						installedModules.push(modulePath);
 					}
 		
 					catch(error) {
@@ -164,7 +167,7 @@ function useJS() {
 		
 					let item = null;
 					
-					if(installedModules.includes(path)) {
+					if(installedModules.includes(modulePath)) {
 
 						try {
 							item = require(path);
