@@ -264,10 +264,10 @@ function useJS() {
 
 		if(options.apint) {
 
-			let package = use("apint").buildAPInt(item);
+			let package = use("apint").buildAPInt(result);
 
-			item = (path) => {
-				
+			result = (path) => {
+
 				return path == null ?
 					package : use("apint").use(package, path);
 			};
