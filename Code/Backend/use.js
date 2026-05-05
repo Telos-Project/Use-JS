@@ -193,24 +193,7 @@ function useJS() {
 						let text = openResource(path);
 
 						try {
-
 							item = JSON.parse(text);
-
-							try {
-
-								let package = item;
-
-								item = (path) => {
-									
-									return path == null ?
-										package :
-										use("apint").use(package, path);
-								}
-							}
-
-							catch(error) {
-
-							}
 						}
 
 						catch(error) {
@@ -222,6 +205,17 @@ function useJS() {
 									";return module.exports;"
 							))(use, require);
 						}
+					}
+
+					if(options.apint) {
+
+						let package = use("apint").buildAPInt(item);
+
+						item = (path) => {
+
+							return path == null ?
+								package : use("apint").use(package, path);
+						};
 					}
 
 					use.cache[path] = item;
@@ -243,24 +237,7 @@ function useJS() {
 		let result = null;
 
 		try {
-			
 			result = JSON.parse(data);
-
-			try {
-
-				let package = result;
-
-				result = (path) => {
-					
-					return path == null ?
-						package :
-						use("apint").use(package, path);
-				}
-			}
-
-			catch(error) {
-
-			}
 		}
 
 		catch(error) {
@@ -283,6 +260,17 @@ function useJS() {
 	
 				result = module.exports;
 			}
+		}
+
+		if(options.apint) {
+
+			let package = use("apint").buildAPInt(item);
+
+			item = (path) => {
+				
+				return path == null ?
+					package : use("apint").use(package, path);
+			};
 		}
 		
 		if(!options.dynamic)
