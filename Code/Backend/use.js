@@ -193,7 +193,24 @@ function useJS() {
 						let text = openResource(path);
 
 						try {
+
 							item = JSON.parse(text);
+
+							try {
+
+								let package = item;
+
+								item = (path) => {
+									
+									return path == null ?
+										package :
+										use("apint").use(package, path);
+								}
+							}
+
+							catch(error) {
+
+							}
 						}
 
 						catch(error) {
@@ -226,7 +243,24 @@ function useJS() {
 		let result = null;
 
 		try {
+			
 			result = JSON.parse(data);
+
+			try {
+
+				let package = result;
+
+				result = (path) => {
+					
+					return path == null ?
+						package :
+						use("apint").use(package, path);
+				}
+			}
+
+			catch(error) {
+
+			}
 		}
 
 		catch(error) {
