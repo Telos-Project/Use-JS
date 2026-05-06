@@ -3,6 +3,37 @@ function useJS() {
 	if(typeof use != typeof undefined)
 		return;
 
+	let apintPath =
+		"https://cdn.jsdelivr.net/gh/Telos-Project/APInt/Code/apintUtils.js";
+
+	let autoCORSPath =
+		"https://cdn.jsdelivr.net/gh/Telos-Project/AutoCORS/Code/autoCORS.js";
+
+	if(typeof autoCORS == "undefined") {
+
+		/*
+			
+		let request = new XMLHttpRequest();
+		request.open("GET", autoCORSPath, false);
+
+		request.onreadystatechange = function() {
+
+			if(request.readyState === 4) {
+
+				if(request.status === 200 || request.status == 0)
+					text = request.responseText;
+			}
+		}
+
+		request.send(null);
+
+		(1, eval)(text);
+
+		autoCORS.applyDefault();
+
+		*/
+	}
+
 	module = {
 		id: '.',
 		exports: { },
@@ -14,6 +45,34 @@ function useJS() {
 	};
 	
 	window.use = (path, options) => {
+
+		function open(url) {
+
+			let request = new XMLHttpRequest();
+			request.open("GET", url, false);
+
+			request.onreadystatechange = function() {
+
+				if(request.readyState === 4) {
+
+					if(request.status === 200 || request.status == 0)
+						text = request.responseText;
+				}
+			}
+
+			request.send(null);
+
+			return text;
+		}
+
+		function processAPInt(package) {
+
+			return (path) => {
+
+				return path == null ?
+					package : use(apintPath).use(package, path);
+			};
+		}
 
 		if(typeof options != "object")
 			options = { };
@@ -86,19 +145,30 @@ function useJS() {
 			
 			if(!options.dynamic) {
 
-				let request = new XMLHttpRequest();
-				request.open("GET", path, false);
+				if(path.includes("/") && !path.startsWith("@"))
+					text = open(path);
 
-				request.onreadystatechange = function() {
+				else {
 
-					if(request.readyState === 4) {
+					try {
 
-						if(request.status === 200 || request.status == 0)
-							text = request.responseText;
+						let package = JSON.parse(open(
+							`https://cdn.jsdelivr.net/npm/${path}/package.json`
+						));
+
+						text = open(
+							`https://cdn.jsdelivr.net/npm/${
+								path
+							}/${
+								package.main
+							}`
+						);
+					}
+
+					catch(error) {
+
 					}
 				}
-
-				request.send(null);
 
 				use.cache[lowerPath] = newModule;
 			}
@@ -141,7 +211,8 @@ function useJS() {
 		
 				newModule.loaded = true;
 		
-				return newModule.exports;
+				return options.apint ?
+					processAPInt(newModule.exports) : newModule.exports;
 			}
 
 			else {
@@ -150,12 +221,16 @@ function useJS() {
 
 				(1, eval)(text);
 
-				return module.exports;
+				return options.apint ?
+					processAPInt(module.exports) : module.exports;
 			}
 		}
 	
-		else
-			return cacheItem.exports;
+		else {
+
+			return options.apint ?
+				processAPInt(cacheItem.exports) : cacheItem.exports;
+		}
 	}
 
 	window.require = use;
