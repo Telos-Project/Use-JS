@@ -10,8 +10,6 @@ function useJS() {
 		"https://cdn.jsdelivr.net/gh/Telos-Project/AutoCORS/Code/autoCORS.js";
 
 	if(typeof autoCORS == "undefined") {
-
-		/*
 			
 		let request = new XMLHttpRequest();
 		request.open("GET", autoCORSPath, false);
@@ -30,8 +28,6 @@ function useJS() {
 		(1, eval)(text);
 
 		autoCORS.applyDefault();
-
-		*/
 	}
 
 	module = {
